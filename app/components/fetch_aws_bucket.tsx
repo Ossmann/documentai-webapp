@@ -11,21 +11,30 @@ export default function FileList() {
     const [files, setFiles] = useState<File[]>([]);
 
     useEffect(() => {
+        let intervalId: NodeJS.Timeout;
+
         async function fetchFiles() {
             const response = await fetch('/api/list-files');
             const data = await response.json();
             setFiles(data.files);
         }
 
+        // Fetch files initially
         fetchFiles();
+
+        // Poll the server for new files every 10 seconds (10000ms)
+        intervalId = setInterval(fetchFiles, 10000);
+
+        // Clean up the interval when the component unmounts
+        return () => clearInterval(intervalId);
     }, []);
 
     return (
         <div>
             <div className='text-lg font-bold'>
-                Dowload Files
-                </div>
-            <div>Wait until your extracted data appears hear, then download.</div>
+                Download Files
+            </div>
+            <div>Wait until your extracted data appears here, then download.</div>
             <ul>
                 {files.map(file => (
                     <li key={file.key}>

@@ -9,17 +9,20 @@ export async function GET() {
 
     try {
         const data = await s3.listObjectsV2(params).promise();
-        const files = data.Contents?.map(item => ({
+        if (!data.Contents || data.Contents.length === 0) {
+            console.log('No files found in the specified folder.');
+            return NextResponse.json({ files: [] });
+        }
+
+        const files = data.Contents.map(item => ({
             key: item.Key,
-            url: s3.getSignedUrl('getObject', {
-                Bucket: 'my-pdf-processing-ai-bucket',
-                Key: item.Key,
-                Expires: 60 * 5, // URL expiration time in seconds
-            }),
+            url: `https://${params.Bucket}.s3.${process.env.AWS_DEFAULT_REGION}.amazonaws.com/${item.Key}`
         }));
 
+        console.log('Files found:', files); // Debug log for the response
         return NextResponse.json({ files });
     } catch (error) {
+        console.error('Error listing files:', error); // Log the error
         if (error instanceof Error) {
             return NextResponse.json({ error: error.message }, { status: 500 });
         } else {
