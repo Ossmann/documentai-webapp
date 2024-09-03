@@ -23,13 +23,13 @@ export default function Home() {
         Currently the app filters for the following variables:
         <div className="text-sm text-left pt-2">
           <div>
-          "room_config": "Find a type of room'.",
+          room_config: Find a type of room.,
           </div>
           <div>
-          "High_season_rate": "How much does this room cost in high season?",
+          High_season_rate: How much does this room cost in high season?,
           </div>
           <div>
-          "destination": "What is the destination that offers an accommodation?"
+          destination: What is the destination that offers an accommodation?
           </div>
         </div>
       </div>
