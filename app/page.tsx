@@ -1,5 +1,5 @@
 import Image from "next/image";
-import PDFUpload from "./components/Upload_pdf_field";
+import PDFUpload from "./components/upload_pdf_field";
 import FileList from "./components/fetch_aws_bucket";
 
 export default function Home() {
