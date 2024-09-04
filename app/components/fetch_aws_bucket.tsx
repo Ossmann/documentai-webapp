@@ -14,7 +14,11 @@ export default function FileList() {
         let intervalId: NodeJS.Timeout;
 
         async function fetchFiles() {
-            const response = await fetch('/api/list-files');
+            const response = await fetch('/api/list-files?bypassCache=true', {
+                headers: {
+                    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0, s-maxage=0, stale-while-revalidate=0'
+                }
+            });
             const data = await response.json();
             setFiles(data.files);
         }
