@@ -9,6 +9,10 @@ export async function GET() {
 
     try {
         const data = await s3.listObjectsV2(params).promise();
+
+        // Log the full response from S3 for debugging purposes
+        console.log('S3 response data:', JSON.stringify(data, null, 2));        
+
         if (!data.Contents || data.Contents.length === 0) {
             console.log('No files found in the specified folder.');
             return NextResponse.json({ files: [] }, {
@@ -22,6 +26,8 @@ export async function GET() {
             key: item.Key,
             url: `https://${params.Bucket}.s3.${process.env.AWS_DEFAULT_REGION}.amazonaws.com/${item.Key}`
         }));
+
+        console.log('Files found:', files);
 
         console.log('Files found:', files); // Debug log for the response
         return NextResponse.json({ files }, {
