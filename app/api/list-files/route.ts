@@ -11,7 +11,11 @@ export async function GET() {
         const data = await s3.listObjectsV2(params).promise();
         if (!data.Contents || data.Contents.length === 0) {
             console.log('No files found in the specified folder.');
-            return NextResponse.json({ files: [] });
+            return NextResponse.json({ files: [] }, {
+                headers: {
+                    'Cache-Control': 'no-store',
+                }
+            });
         }
 
         const files = data.Contents.map(item => ({
@@ -20,7 +24,11 @@ export async function GET() {
         }));
 
         console.log('Files found:', files); // Debug log for the response
-        return NextResponse.json({ files });
+        return NextResponse.json({ files }, {
+            headers: {
+                'Cache-Control': 'no-store',
+            }
+        });
     } catch (error) {
         console.error('Error listing files:', error); // Log the error
         if (error instanceof Error) {
